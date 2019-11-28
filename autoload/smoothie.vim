@@ -183,7 +183,7 @@ function s:afterScroll()
     let s:target_column = 0
   endif
 
-  call s:displayBar()
+  call smoothie#displayBar()
 endfunction
 
 ""
@@ -246,11 +246,14 @@ endfunction
 
 
 if !exists("g:scroll_str")
-    let g:scroll_str = "█"
-    let g:scroll_str_length = 3 " because vim can't count string with special characters
+    " let g:scroll_str = "█"
+    " let g:scroll_str_length = 3 " because vim can't count string with special characters
+
+    let g:scroll_str = "⚫"
+    let g:scroll_str_length = 1 " because vim can't count string with special characters
 endif
 
-function! s:displayBar()
+function! smoothie#displayBar()
   set nomore
 
   " let curpos = getpos('.')
@@ -299,6 +302,10 @@ function! s:displayBar()
 
     endif
   endfor
+
+  if cursor > 0
+    let bar .= repeat(' ', cursor - cursorSizePre - prev) . g:scroll_str
+  endif
 
   echo bar
 endfunction
