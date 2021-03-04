@@ -182,8 +182,6 @@ function s:afterScroll()
     norm!hl
     let s:target_column = 0
   endif
-
-  call smoothie#displayBar()
 endfunction
 
 ""
@@ -242,70 +240,4 @@ endfunction
 
 function smoothie#end_of_file()
   call s:update_target( line('$') - line('.') )
-endfunction
-
-
-if !exists("g:scroll_str")
-    " let g:scroll_str = "█"
-    " let g:scroll_str_length = 3 " because vim can't count string with special characters
-
-    let g:scroll_str = "⚫"
-    let g:scroll_str_length = 1 " because vim can't count string with special characters
-endif
-
-function! smoothie#displayBar()
-  set nomore
-
-  " let curpos = getpos('.')
-  let totalLines = line('$')
-  let drawableWidth = winwidth(0) -15 - g:scroll_str_length
-
-  let matches = []
-
-  let l=0
-  while l <= line('$')
-    if matchstr(getline(l), @/) != ''
-      let matches += [ l * drawableWidth / totalLines ]
-    endif
-    let l+=1
-  endwhile
-  let cursor = ( drawableWidth ) * line('.') / totalLines
-
-  let bar=''
-  let prev = 0
-
-  let cursorSizePre = g:scroll_str_length/2 + ( g:scroll_str_length+1 )%2
-  let cursorSizePost = g:scroll_str_length - cursorSizePre - 1
-
-  for m in matches
-    if m <= prev | continue | endif
-
-    if cursor>0 && cursor == m
-
-      let bar .= repeat(' ', cursor - cursorSizePre - prev) . g:scroll_str
-      let prev = cursor + cursorSizePost
-      let cursor = 0
-
-    elseif cursor>0 && (cursor-cursorSizePre) <= m
-
-      let bar .= repeat(' ', cursor - cursorSizePre - prev) . g:scroll_str
-      let prev = cursor + cursorSizePost
-      let cursor = 0
-
-      let bar .= repeat(' ', m-prev-1) . ':'
-      let prev=m
-
-    else
-
-      let bar .= repeat(' ', m-prev-1) . ':'
-      let prev=m
-
-    endif
-  endfor
-
-  if cursor > 0
-    let bar .= repeat(' ', cursor - cursorSizePre - prev) . g:scroll_str
-  endif
-
-  echo bar
 endfunction

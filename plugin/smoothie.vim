@@ -14,8 +14,6 @@ nnoremap <silent> <PageUp>   :<C-U>call smoothie#upwards() <CR>
 " nmap <silent> gg :<C-U>call smoothie#beg_of_file() <CR>
 " nmap <silent> G :<C-U>call smoothie#end_of_file() <CR>
 
-nmap <silent> <F4> :<C-U>call smoothie#displayBar()<CR>
-
 nmap <silent> n n<F4>
 nmap <silent> N N<F4>
 nmap <silent> * *<F4>
